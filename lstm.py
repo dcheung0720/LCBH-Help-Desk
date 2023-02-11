@@ -17,9 +17,6 @@ from spacy.lang.en.examples import sentences
 
 df = pd.read_csv("Help_Desk_Data_Cleaned_for_Category_Model.csv")
 
-print(df.shape)
-print(df.head())
-
 classes = {"Conditions": 0, "Conditions (Breach)" : 1, "Conditions (Essential Services)": 2, "Conditions (General)" : 3, "English" : 4, "Eviction" : 5, "Eviction (General)" : 6, "Eviction (Post-Filing)" : 7, "Eviction (Post-Judgment)": 8, "Eviction (Pre-Filing | Prevention)": 9, "Eviction (Pre-Filing)" :10, "Eviction (Sealing)": 11, "Foreclosure": 12, "Invalid Inquiry": 13, "Leases": 14, "Lockout": 15, "Lockout (Constructive)": 16, "Other" : 17, "Rental Assistance": 18, "Security Deposit": 19}
 df['Answer Category'] = df['Answer Category'].apply(lambda x: classes[x])
 
@@ -134,7 +131,7 @@ class LSTM_fixed_len(torch.nn.Module) :
         self.embeddings = nn.Embedding(vocab_size, embedding_dim, padding_idx=0)
         self.lstm = nn.LSTM(embedding_dim, hidden_dim, batch_first=True)
         self.linear = nn.Linear(hidden_dim, 20)
-        self.dropout = nn.Dropout(0.2)
+        self.dropout = nn.Dropout(0.5)
         
     def forward(self, x, l):
         x = self.embeddings(x)
@@ -144,9 +141,9 @@ class LSTM_fixed_len(torch.nn.Module) :
 
 
 model_fixed =  LSTM_fixed_len(vocab_size, 50, 50)
-train_model(model_fixed, epochs=30, lr=0.01)
-train_model(model_fixed, epochs=30, lr=0.01)
-train_model(model_fixed, epochs=30, lr=0.01)
+# train_model(model_fixed, epochs=500, lr=0.1)
+train_model(model_fixed, epochs=30, lr=0.060)
+train_model(model_fixed, epochs=30, lr=0.060)
 
 # x = torch.tensor([[1,2, 12,34, 56,78, 90,80],
 #                  [12,45, 99,67, 6,23, 77,82],
