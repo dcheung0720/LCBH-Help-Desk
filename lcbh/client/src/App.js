@@ -8,7 +8,7 @@ import InquiryForm from './components/inquiryForm';
 
 function App() {
   return (
-    <div>
+    <div className = "content">
       <InquiryForm></InquiryForm>
     </div>
   ) 
