@@ -15,7 +15,8 @@ class responseGenerator():
         tfidf = TfidfVectorizer()
         X = tfidf.fit_transform(X)              #vectorize the text inquires for our model
  
-        Y = df["Answer"]
+        #Y = df["Answer"]
+        Y = df[["Answer","Answer Category"]]   #added answer category
 
         knn = neighbors.KNeighborsClassifier(n_neighbors=1, metric="cosine")     #only one neighbor (find the closest past inquiry)
         # I think a lot can be done with the distance metric in order to get better results. For instance, we could add a fields... 
@@ -33,12 +34,13 @@ class responseGenerator():
         trial_v = self.vectorizer.transform(trial)    #vectorizer inquiry
         #print("trial_v=",trial_v)
         prediction = self.model.predict(trial_v)          #predict response
-        return prediction[0]
+        return prediction[0,0], prediction[0,1]
         #print(preds1)
 
-    def add_data(self,inquiry,response):
+    def add_data(self,inquiry,response,category):
         new_row = {'Inquiry':[inquiry],
-                    'Answer':[response]}
+                    'Answer':[response],
+                    'Answer Category':[category]}
         new_row_df = pd.DataFrame(new_row)
         self.dataframe = pd.concat([self.dataframe, new_row_df],ignore_index = True)
 
@@ -46,7 +48,8 @@ class responseGenerator():
         tfidf = TfidfVectorizer()
         X = tfidf.fit_transform(X)              #vectorize the text inquires for our model
  
-        Y = self.dataframe["Answer"]
+        #Y = self.dataframe["Answer"]
+        Y = self.dataframe[["Answer","Answer Category"]]
 
         knn = neighbors.KNeighborsClassifier(n_neighbors=1, metric="cosine")     #only one neighbor (find the closest past inquiry)
         # I think a lot can be done with the distance metric in order to get better results. For instance, we could add a fields... 
@@ -66,6 +69,6 @@ rG = responseGenerator(dataset_file= r"Help_Desk_Data_Cleaned_for_Category_Model
 print(rG.get_response("Help, my landlord is trying to evict me!"))
 print(rG.get_response("I don't have enough money for rent this month"))
 
-rG.add_data("Hello there 123","This is an answer")
+rG.add_data("Hello there 123","This is an answer","Eviction")
 
 print(rG.get_response("Hello 123"))
