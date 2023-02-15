@@ -9,11 +9,11 @@ CORS(app)
 def home():
     if request.method == "POST":
         text = request.json.get("inquiry")
-        rg = responseGenerator(dataset_file= r"Help_Desk_Data_Cleaned_for_Category_Model_Mark_2.csv")
-        response = rg.get_response(text)[0]
-        cat = rg.get_response(text)[1]
+        rg = responseGenerator(dataset_file= r"Help_Desk_Data_Cleaned_for_Category_Model_Mark_2.csv", n_neighbors=3)
+        # response = rg.get_response(text)[0]
+        # cat = rg.get_response(text)[1]
         
-        return jsonify({"inquiry": [response, cat]})
+        return jsonify({"inquiry": rg.get_response(text)})
 
 if __name__ == "__main__":
     app.run(debug= True)

@@ -1,5 +1,3 @@
-
-
 import { Formik } from 'formik';
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
@@ -8,8 +6,8 @@ import SampleResponse from './sampleResponse';
 
 
 function InquiryForm(){
-    const [sampleRes, setSampleRes] = useState("");
-    const [sampleResType, setSampleResType] = useState("");
+    const [sampleRes, setSampleRes] = useState([]);
+    // const [sampleResType, setSampleResType] = useState("");
     const textChanged = (event) =>{
         setSampleRes(
             event.target.value
@@ -19,7 +17,7 @@ function InquiryForm(){
     return(<div>
         <h1>Inquiry</h1>
         <Formik
-          initialValues={{ inquiry: '' }}
+          initialValues={{ inquiry: [] }}
           onSubmit={(values) => {
             setTimeout(() => {
               fetch("http://localhost:5000/inquiry",
@@ -32,9 +30,13 @@ function InquiryForm(){
                 body: JSON.stringify({
                   inquiry: values.inquiry
                 })
-              }).then(res =>{return res.json()})
-              .then(data =>{ setSampleRes(data["inquiry"][0])
-                              setSampleResType(data["inquiry"][1])})
+              })
+                .then(res => res.json())
+                .then(data =>{ 
+                  // console.log(data.inquiry)
+                  setSampleRes(data.inquiry)
+                })
+                .catch(err => console.log(err))
             });
           }}
         >
@@ -59,11 +61,11 @@ function InquiryForm(){
               />
               <Button type="submit" onClick ={handleSubmit} variant="primary">Submit</Button>
               </div>
-                </form>
+            </form>
           )}
         </Formik>
           <br></br>
-          <SampleResponse  sampleRes = {sampleRes} sampleResType = {sampleResType} textChanged = {textChanged}></SampleResponse>
+          <SampleResponse  sampleRes = {sampleRes} textChanged = {textChanged}></SampleResponse>
       </div>)
 }
 
