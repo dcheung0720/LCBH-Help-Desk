@@ -10,8 +10,10 @@ def home():
     if request.method == "POST":
         text = request.json.get("inquiry")
         rg = responseGenerator(dataset_file= r"Help_Desk_Data_Cleaned_for_Category_Model_Mark_2.csv")
-        data = rg.get_response(text)
-        return jsonify({"inquiry": data})
+        response = rg.get_response(text)[0]
+        cat = rg.get_response(text)[1]
+        
+        return jsonify({"inquiry": [response, cat]})
 
 if __name__ == "__main__":
     app.run(debug= True)

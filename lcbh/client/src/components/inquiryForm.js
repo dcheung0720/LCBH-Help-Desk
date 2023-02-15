@@ -4,12 +4,14 @@ import { Formik } from 'formik';
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import './inquiryForm.css';
+import SampleResponse from './sampleResponse';
 
 
 function InquiryForm(){
-    const [data, setData] = useState("");
+    const [sampleRes, setSampleRes] = useState("");
+    const [sampleResType, setSampleResType] = useState("");
     const textChanged = (event) =>{
-        setData(
+        setSampleRes(
             event.target.value
         );
     }
@@ -31,7 +33,8 @@ function InquiryForm(){
                   inquiry: values.inquiry
                 })
               }).then(res =>{return res.json()})
-              .then(data => setData(data["inquiry"]))
+              .then(data =>{ setSampleRes(data["inquiry"][0])
+                              setSampleResType(data["inquiry"][1])})
             });
           }}
         >
@@ -59,9 +62,8 @@ function InquiryForm(){
                 </form>
           )}
         </Formik>
-            <br></br>
-          <h2>Sample response:</h2>
-          <textarea style = {{"height" : "200px"}} value={data} onChange={textChanged} > </textarea>
+          <br></br>
+          <SampleResponse  sampleRes = {sampleRes} sampleResType = {sampleResType} textChanged = {textChanged}></SampleResponse>
       </div>)
 }
 
