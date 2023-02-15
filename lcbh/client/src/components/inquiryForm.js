@@ -6,7 +6,7 @@ import SampleResponse from './sampleResponse';
 
 
 function InquiryForm(){
-    const [sampleRes, setSampleRes] = useState("");
+    const [sampleRes, setSampleRes] = useState([]);
     // const [sampleResType, setSampleResType] = useState("");
     const textChanged = (event) =>{
         setSampleRes(
@@ -17,7 +17,7 @@ function InquiryForm(){
     return(<div>
         <h1>Inquiry</h1>
         <Formik
-          initialValues={{ inquiry: '' }}
+          initialValues={{ inquiry: [] }}
           onSubmit={(values) => {
             setTimeout(() => {
               fetch("http://localhost:5000/inquiry",
@@ -33,7 +33,7 @@ function InquiryForm(){
               })
                 .then(res => res.json())
                 .then(data =>{ 
-                  console.log(data.inquiry)
+                  // console.log(data.inquiry)
                   setSampleRes(data.inquiry)
                 })
                 .catch(err => console.log(err))

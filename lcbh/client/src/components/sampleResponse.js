@@ -15,14 +15,18 @@ function SampleResponse({ sampleRes, textChanged }) {
     return (
     <>
         <h2>Sample response:</h2>
-        {/* <textarea style={{ "height": "200px" }} value={sampleRes} onChange={textChanged} > </textarea> */}
-        <div className="carousel">
-            <button className="prev" onClick={handlePrevClick}>Prev</button>
-            <div className="item">
-                <p>{sampleRes[currentIndex]}</p>
-            </div>
-            <button className="next" onClick={handleNextClick}>Next</button>
-        </div>
+        {
+            sampleRes.length !== 0 && 
+                <div className="carousel">
+                    <button className="prev" onClick={handlePrevClick}>Prev</button>
+                    <div className="response">
+                        <p>Category: {sampleRes[currentIndex][1]}</p>
+                        <p>Original Inquiry: {sampleRes[currentIndex][2]}</p>
+                        <textarea style={{ "height": "200px" }} value={sampleRes[currentIndex][0]} onChange={textChanged} > </textarea>
+                    </div>
+                    <button className="next" onClick={handleNextClick}>Next</button>
+                </div>
+        }
     </>
     )
 }
