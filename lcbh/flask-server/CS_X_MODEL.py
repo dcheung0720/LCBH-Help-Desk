@@ -55,9 +55,9 @@ class responseGenerator():
 
 
 rG = responseGenerator(dataset_file= r"Help_Desk_Data_Cleaned_for_Category_Model_Mark_2.csv",n_neighbors=5)
-#print(rG.get_response("Help, my landlord is trying to evict me!"))
+print(rG.get_response("Help, my landlord is trying to evict me!"))
 #print(rG.get_response("I don't have enough money for rent this month"))
 
-rG.add_data("Hello there 123","This is an answer","Eviction")
+#rG.add_data("Hello there 123","This is an answer","Eviction")
 
 #print(rG.get_response("Hello 123"))
