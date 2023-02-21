@@ -7,12 +7,10 @@ import SampleResponse from './sampleResponse';
 
 function InquiryForm(){
     const [sampleRes, setSampleRes] = useState([]);
-    // const [sampleResType, setSampleResType] = useState("");
-    const textChanged = (event) =>{
-        setSampleRes(
-            event.target.value
-        );
-    }
+    const [currentText, setCurrentText] = useState('');
+    const textChanged = (event) => {
+      setCurrentText(event.target.value);
+    };
     
     return(<div>
         <h1>Inquiry</h1>
@@ -65,7 +63,7 @@ function InquiryForm(){
           )}
         </Formik>
           <br></br>
-          <SampleResponse  sampleRes = {sampleRes} textChanged = {textChanged}></SampleResponse>
+          <SampleResponse sampleRes={sampleRes} textChanged={textChanged} currentText={currentText} setCurrentText={setCurrentText}></SampleResponse>
       </div>)
 }
 
