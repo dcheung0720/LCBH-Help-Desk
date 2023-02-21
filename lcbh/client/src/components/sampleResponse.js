@@ -12,6 +12,17 @@ function SampleResponse({ sampleRes, textChanged }) {
       setCurrentIndex((currentIndex + 1) % sampleRes.length);
     };
 
+    useEffect(() => {
+        sampleRes.forEach((res) => {
+            if (res[0].startsWith('\n\n\n'))
+                res[0] = res[0].split('\n\n\n')[1]
+            // 12 empty spaces in the beginning
+            if(res[0].startsWith('            '))
+                res[0] = res[0].split('            ')[1]
+        })
+        console.log(sampleRes)
+    }, [sampleRes])
+
     return (
     <>
         <h2>Sample response:</h2>
