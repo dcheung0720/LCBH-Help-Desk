@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 
-function SampleResponse({ sampleRes, textChanged }) {
+function SampleResponse({ sampleRes, textChanged, currentText, setCurrentText }) {
 
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -20,7 +20,6 @@ function SampleResponse({ sampleRes, textChanged }) {
             if(res[0].startsWith('            '))
                 res[0] = res[0].split('            ')[1]
         })
-        console.log(sampleRes)
     }, [sampleRes])
 
     return (
@@ -33,7 +32,14 @@ function SampleResponse({ sampleRes, textChanged }) {
                     <div className="response">
                         <p>Category: {sampleRes[currentIndex][1]}</p>
                         <p>Original Inquiry: {sampleRes[currentIndex][2]}</p>
-                        <textarea style={{ "height": "200px" }} value={sampleRes[currentIndex][0]} onChange={textChanged} > </textarea>
+                        <textarea 
+                            style={{ "height": "200px" }}
+                            defaultValue={sampleRes[currentIndex][0]}
+                            onChange={(e) => {
+                                textChanged(e);
+                                setCurrentText(e.target.value);
+                              }} > 
+                        </textarea>
                     </div>
                     <button className="next" onClick={handleNextClick}>Next</button>
                 </div>
