@@ -3,10 +3,13 @@ import './App.css';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InquiryForm from './components/inquiryForm';
+import Threads from './components/threads';
 import env from "react-dotenv";
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 function App() {
+  const [access_token, set_access_token] = useState(undefined);
+
   const authenticate = () => {
     fetch('https://api.helpscout.net/v2/oauth2/token', {
       method: 'POST', 
@@ -20,18 +23,19 @@ function App() {
       })
     })
     .then(res => res.json())
-    .then(data => console.log(data))
+    .then(data => set_access_token(data))
     .catch(err => console.log(err))
   }
 
+  // authenticate us
   useEffect(() => {
-    console.log(window.env.CLIENT_ID)
     authenticate()
     
   }, [])
 
   return (
     <div className="content"> 
+      {access_token ? <Threads access_token = {access_token.access_token}></Threads>: <></>}
       <InquiryForm></InquiryForm>
     </div>
   ) 

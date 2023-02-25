@@ -11,7 +11,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  <>
     <Navbar bg="dark" expand="dark">
     <Container style ={{"marginLeft" : "15px"}}>
       <Navbar.Brand style ={{"color" : "white", "fontSize" : "25px"}} href="#home">LCBH Help Desk</Navbar.Brand>
@@ -25,7 +25,7 @@ root.render(
     </Container>
   </Navbar>
     <App />
-</React.StrictMode>
+  </>
 );
 
 // If you want to start measuring performance in your app, pass a function
