@@ -4,40 +4,34 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InquiryForm from './components/inquiryForm';
 import env from "react-dotenv";
+import { useEffect } from 'react';
 
 function App() {
+  const authenticate = () => {
+    fetch('https://api.helpscout.net/v2/oauth2/token', {
+      method: 'POST', 
+      headers: {
+        "Content-Type": 'application/json',
+      },
+      body: JSON.stringify({
+        client_id: `${env.CLIENT_ID}`,
+        client_secret: `${env.CLIENT_SECRET}`,
+        grant_type: 'client_credentials'
+      })
+    })
+    .then(res => res.json())
+    .then(data => console.log(data))
+    .catch(err => console.log(err))
+  }
+
+  useEffect(() => {
+    console.log(window.env.CLIENT_ID)
+    authenticate()
+    
+  }, [])
+
   return (
-    <div className = "content">
-      <Button variant="primary" onClick={() =>
-        fetch("https://api.helpscout.net/v2/conversations?status=active", {
-            method: "GET",
-            headers: { 
-              "Content-Type": 'application/json',
-              // "Access-Control-Allow-Origin": "*",
-              "Authorization" : `Bearer ${env.HS_SECRET_KEY}`
-            }
-          }
-        ).then(res => res.json())
-        .then(data => console.log(data))
-
-      }>Primary</Button>
-
-      <Button variant="primary" onClick={() =>
-        fetch("https://api.helpscout.net/v2/conversations/2157256241/tags", {
-            method: "PUT",
-            headers: { 
-              "Content-Type": 'application/json',
-              // "Access-Control-Allow-Origin": "*",
-              "Authorization" : `Bearer ${env.HS_SECRET_KEY}`
-            },
-            body: JSON.stringify({
-                "tags" : [ "eviction" ]
-            })
-
-          }
-        ).then(res => console.log(res))
-
-      }>Primary</Button>  
+    <div className="content"> 
       <InquiryForm></InquiryForm>
     </div>
   ) 
