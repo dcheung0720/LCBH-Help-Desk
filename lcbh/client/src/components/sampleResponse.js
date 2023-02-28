@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
+import Button from 'react-bootstrap/Button';
 
-function SampleResponse({ sampleRes, textChanged, currentText, setCurrentText }) {
+function SampleResponse({ sampleRes, textChanged, currentText, setCurrentText, access_token, conv_id, customerID }) {
 
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -11,6 +12,25 @@ function SampleResponse({ sampleRes, textChanged, currentText, setCurrentText })
     const handleNextClick = () => {
       setCurrentIndex((currentIndex + 1) % sampleRes.length);
     };
+
+    const createReplyToThread = () => {
+        console.log(currentText)
+        fetch(`https://api.helpscout.net/v2/conversations/${conv_id}/reply`, {
+            method: "POST",
+            headers: {
+                "Content-Type": 'application/json',
+                "Authorization": `Bearer ${access_token}`
+            },
+            body: JSON.stringify({
+                "customer" : {
+                    "id" : customerID
+                },
+                "text" : "Testing reply post"
+            })
+        })
+        .then(() => console.log("Reply was sent!"))
+        .catch(err => console.log(err))
+    }
 
     useEffect(() => {
         sampleRes.forEach((res) => {
@@ -27,6 +47,7 @@ function SampleResponse({ sampleRes, textChanged, currentText, setCurrentText })
         <h2>Sample response:</h2>
         {
             sampleRes.length !== 0 && 
+            <>
                 <div className="carousel">
                     <button className="prev" onClick={handlePrevClick}>Prev</button>
                     <div className="response">
@@ -43,6 +64,8 @@ function SampleResponse({ sampleRes, textChanged, currentText, setCurrentText })
                     </div>
                     <button className="next" onClick={handleNextClick}>Next</button>
                 </div>
+                <Button variant="primary" onClick={createReplyToThread}>Send to HelpScout</Button>
+            </>
         }
     </>
     )
