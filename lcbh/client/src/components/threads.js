@@ -10,8 +10,11 @@ function Threads({access_token}){
         getThreads();
     }, []);
 
+    const link = window.location.href.split("/");
+    const conv_id = link[link.length - 1];
+
     function getThreads(){
-        fetch(`https://api.helpscout.net/v2/conversations/${2157256241}/threads`, {
+        fetch(`https://api.helpscout.net/v2/conversations/${conv_id}/threads`, {
             method: "GET",
             headers:{
                 "Content-Type": 'application/json',
@@ -28,7 +31,7 @@ function Threads({access_token}){
         <Container fluid="md">
             {threads.map(thread =>
                 <Row style ={{borderStyle: "solid", marginBottom: "10px", padding: "15px"}}>{thread.body}</Row>
-            ) }
+            ) }p
         </Container> : <></>)
 
 }
