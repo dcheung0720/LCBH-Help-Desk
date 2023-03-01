@@ -3,15 +3,12 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 
 
-function Threads({access_token}){
+function Threads({access_token, conv_id}){
     const [threads, setThreads] = useState(undefined);
 
     useEffect(() =>{
         getThreads();
     }, []);
-
-    const link = window.location.href.split("/");
-    const conv_id = link[link.length - 1];
 
     function getThreads(){
         fetch(`https://api.helpscout.net/v2/conversations/${conv_id}/threads`, {
