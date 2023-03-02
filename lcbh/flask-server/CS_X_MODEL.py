@@ -3,15 +3,19 @@ from sklearn import model_selection
 from sklearn import neighbors
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.impute import SimpleImputer
+from mongo_import import get_df_from_mongodb
 
-
+CONNECTION_STRING = "mongodb+srv://jackdaenzer2024:eZUnYSdbNJuzvH9U@csx-lcbh.us3nupa.mongodb.net/csx-lcbh"
 
 class responseGenerator():
     def __init__(self, dataset_file, n_neighbors):
-        df = pd.read_csv(dataset_file)    #read csv of all past inquiry-response combinations
+        df = get_df_from_mongodb(CONNECTION_STRING)
+        #df = pd.read_csv(dataset_file)    #read csv of all past inquiry-response combinations
         df = df.dropna(subset=['Answer']) #remove pairs without a response (all rows in data have an inquiry)
         self.dataframe = df
         self.n_neighbors = n_neighbors
+        self.stop_words = ['help','been', 'has', 'by', 'when', 'also', 'had', 'want', 'any', 'just', 'our', 'my', 'helpscout', 'about', 'are', 'if', 'issues', 'be', 'on', 've', 'don', 'is', 'she', 'did', 'can', 'it', 'since', 'like', 'to', 'them', 'us', 'no', 'previous', 'with', 'secure', 'back', 'me', 'net', 'do', 'without', 'told', 'an', 'and', 'there', 'have', 'from', 'legal', 'not', 'https', 'the', 'that', 'what', 'in', 'need', 'because', 'at', 'being', 'am', 'trying', 'will', 'rent', 'of', 'new', 'they', 'how', 'after', 'as', 'still', 'due', 'was', 'know', 'for', 'building', 'would', 'now', 'you', 'or', 'received', 'he', 'issue', 'get', 'we', 'but', 'all', 'so', 'this']
+
         self.fit_responses()
         
     def get_response(self,inquiry):
@@ -35,7 +39,8 @@ class responseGenerator():
 
     def fit_responses(self):
         X = self.dataframe["Inquiry"]
-        tfidf = TfidfVectorizer()
+        #tfidf = TfidfVectorizer(max_df=0.1)
+        tfidf = TfidfVectorizer(stop_words=self.stop_words)
         X = tfidf.fit_transform(X)              #vectorize the text inquires for our model
  
         #Y = df["Answer"]
@@ -55,9 +60,10 @@ class responseGenerator():
 
 
 rG = responseGenerator(dataset_file= r"Help_Desk_Data_Cleaned_for_Category_Model_Mark_2.csv",n_neighbors=5)
-#print(rG.get_response("Help, my landlord is trying to evict me!"))
+print(rG.get_response("Help, my landlord is trying to evict me!"))
 #print(rG.get_response("I don't have enough money for rent this month"))
 
 rG.add_data("Hello there 123","This is an answer","Eviction")
 
 #print(rG.get_response("Hello 123"))
+#print(rG.vectorizer.stop_words_)
