@@ -5,7 +5,7 @@ import './inquiryForm.css';
 import SampleResponse from './sampleResponse';
 
 
-function InquiryForm(){
+function InquiryForm({access_token, conv_id, customerID}){
     const [sampleRes, setSampleRes] = useState([]);
     const [currentText, setCurrentText] = useState('');
     const textChanged = (event) => {
@@ -63,7 +63,15 @@ function InquiryForm(){
           )}
         </Formik>
           <br></br>
-          <SampleResponse sampleRes={sampleRes} textChanged={textChanged} currentText={currentText} setCurrentText={setCurrentText}></SampleResponse>
+          <SampleResponse 
+            sampleRes={sampleRes}
+            textChanged={textChanged}
+            currentText={currentText}
+            setCurrentText={setCurrentText} 
+            access_token={access_token}
+            conv_id={conv_id}
+            customerID={customerID}
+          />
       </div>)
 }
 
