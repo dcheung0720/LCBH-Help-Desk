@@ -3,12 +3,12 @@ from sklearn import model_selection
 from sklearn import neighbors
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.impute import SimpleImputer
-from mongo_import import get_df_from_mongodb
+from mongo_import import get_df_from_mongodb, add_row_to_mongodb
 
 CONNECTION_STRING = "mongodb+srv://jackdaenzer2024:eZUnYSdbNJuzvH9U@csx-lcbh.us3nupa.mongodb.net/csx-lcbh"
 
 class responseGenerator():
-    def __init__(self, dataset_file, n_neighbors):
+    def __init__(self, n_neighbors):
         df = get_df_from_mongodb(CONNECTION_STRING)
         #df = pd.read_csv(dataset_file)    #read csv of all past inquiry-response combinations
         df = df.dropna(subset=['Answer']) #remove pairs without a response (all rows in data have an inquiry)
@@ -29,12 +29,14 @@ class responseGenerator():
         return self.dataframe.iloc[predictions[1][0], :][["Answer","Answer Category","Inquiry"]].values.tolist()
 
     def add_data(self,inquiry,response,category):
-        new_row = {'Inquiry':[inquiry],
-                    'Answer':[response],
-                    'Answer Category':[category]}
-        new_row_df = pd.DataFrame(new_row)
-        self.dataframe = pd.concat([self.dataframe, new_row_df],ignore_index = True)
-        self.fit_responses()
+        new_row = {'Inquiry':inquiry,
+                    'Answer':response,
+                    'Answer Category':category}
+        #new_row_df = pd.DataFrame(new_row)
+        #self.dataframe = pd.concat([self.dataframe, new_row_df],ignore_index = True)
+        add_row_to_mongodb(CONNECTION_STRING, new_row)   #This adds the given data point to the databse for future use
+
+        #self.fit_responses()
         
 
     def fit_responses(self):
@@ -59,11 +61,14 @@ class responseGenerator():
         
 
 
-rG = responseGenerator(dataset_file= r"Help_Desk_Data_Cleaned_for_Category_Model_Mark_2.csv",n_neighbors=5)
-print(rG.get_response("Help, my landlord is trying to evict me!"))
+rG = responseGenerator(n_neighbors=1)
+#print(rG.get_response("Help, my landlord is trying to evict me!"))
 #print(rG.get_response("I don't have enough money for rent this month"))
 
+print(rG.get_response("Hello 123"))
 rG.add_data("Hello there 123","This is an answer","Eviction")
+rG2 = responseGenerator(n_neighbors=1)
+print(rG2.get_response("Hello 123"))
 
 #print(rG.get_response("Hello 123"))
 #print(rG.vectorizer.stop_words_)

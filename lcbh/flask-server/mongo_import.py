@@ -16,7 +16,21 @@ def get_df_from_mongodb(c_string):
    return df
 
 #my_col = get_database()["CS_X LCBH Database"]
+def add_row_to_mongodb(c_string,new_row):
+   client = MongoClient(c_string)
+   my_db = client['csxdb']
+   my_col = my_db['CS_X LCBH Database']
+   my_col.insert_one(new_row)
+   
 
 
 #df = pd.DataFrame(list(my_col.find()))
 #print(get_df_from_mongodb("mongodb+srv://jackdaenzer2024:eZUnYSdbNJuzvH9U@csx-lcbh.us3nupa.mongodb.net/csx-lcbh")["Inquiry"])
+db_string = "mongodb+srv://jackdaenzer2024:eZUnYSdbNJuzvH9U@csx-lcbh.us3nupa.mongodb.net/csx-lcbh"
+
+new_row = {'Inquiry':"THIS",
+           'Answer':"IS",
+           'Answer Category':"A TEST 123"}
+
+add_row_to_mongodb(db_string,new_row)
+
