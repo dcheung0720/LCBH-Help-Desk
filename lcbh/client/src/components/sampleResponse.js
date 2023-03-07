@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import Button from 'react-bootstrap/Button';
 
-function SampleResponse({ sampleRes, textChanged, currentText, setCurrentText, access_token, conv_id, customerID }) {
+function SampleResponse({ sampleRes, currentText, setCurrentText, access_token, conv_id, customerID }) {
 
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -27,7 +27,7 @@ function SampleResponse({ sampleRes, textChanged, currentText, setCurrentText, a
                 "customer" : {
                     "id" : customerID
                 },
-                "text" : "Testing reply post"
+                "text" : currentText
             })
         })
         .then(() => console.log("Reply was sent!"))
@@ -42,8 +42,9 @@ function SampleResponse({ sampleRes, textChanged, currentText, setCurrentText, a
             if(res[0].startsWith('            '))
                 res[0] = res[0].split('            ')[1]
         })
+        if(sampleRes.length > 0)
+            setCurrentText(sampleRes[currentIndex][0]);
     }, [sampleRes])
-
 
 
     return (
@@ -66,10 +67,9 @@ function SampleResponse({ sampleRes, textChanged, currentText, setCurrentText, a
                             <div style={{"width" : "100%"}}>
                                 <textarea 
                                     style={{ "height": "200px", "width": "100%"}}
-                                    defaultValue = {sampleRes[currentIndex][0]}
                                     value={currentText}
                                     onChange={(e) => {
-                                        textChanged(e);
+
                                         setCurrentText(e.target.value);
                                     }} > 
                                 </textarea>

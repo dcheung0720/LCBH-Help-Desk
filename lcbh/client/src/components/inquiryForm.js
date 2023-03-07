@@ -67,7 +67,6 @@ function InquiryForm({access_token, conv_id, customerID}){
           <br></br>
           <SampleResponse 
             sampleRes={sampleRes}
-            textChanged={textChanged}
             currentText={currentText}
             setCurrentText={setCurrentText} 
             access_token={access_token}
