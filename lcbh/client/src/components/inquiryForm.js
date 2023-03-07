@@ -11,6 +11,7 @@ function InquiryForm({access_token, conv_id, customerID}){
     const textChanged = (event) => {
       setCurrentText(event.target.value);
     };
+
     
     return(<div>
         <h1>Inquiry</h1>
@@ -57,10 +58,11 @@ function InquiryForm({access_token, conv_id, customerID}){
                 value={values.inquiry}
                 style = {{"marginRight": "13px"}}
               />
-              <Button type="submit" onClick ={handleSubmit} variant="primary">Submit</Button>
+              <Button type="submit"  style = {{"backgroundColor": "#005ca4" }} onClick ={handleSubmit} variant="primary">Submit</Button>
               </div>
             </form>
           )}
+        
         </Formik>
           <br></br>
           <SampleResponse 

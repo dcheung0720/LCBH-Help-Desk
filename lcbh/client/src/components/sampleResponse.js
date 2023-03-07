@@ -7,14 +7,16 @@ function SampleResponse({ sampleRes, textChanged, currentText, setCurrentText, a
 
     const handlePrevClick = () => {
       setCurrentIndex((currentIndex - 1 + sampleRes.length) % sampleRes.length);
+      setCurrentText(sampleRes[currentIndex][0])
     };
   
     const handleNextClick = () => {
       setCurrentIndex((currentIndex + 1) % sampleRes.length);
+      setCurrentText(sampleRes[currentIndex][0])
     };
 
+
     const createReplyToThread = () => {
-        console.log(currentText)
         fetch(`https://api.helpscout.net/v2/conversations/${conv_id}/reply`, {
             method: "POST",
             headers: {
@@ -42,6 +44,8 @@ function SampleResponse({ sampleRes, textChanged, currentText, setCurrentText, a
         })
     }, [sampleRes])
 
+
+
     return (
     <>
         <h2>Sample response:</h2>
@@ -49,22 +53,32 @@ function SampleResponse({ sampleRes, textChanged, currentText, setCurrentText, a
             sampleRes.length !== 0 && 
             <>
                 <div className="carousel">
-                    <button className="prev" onClick={handlePrevClick}>Prev</button>
-                    <div className="response">
-                        <p>Category: {sampleRes[currentIndex][1]}</p>
-                        <p>Original Inquiry: {sampleRes[currentIndex][2]}</p>
-                        <textarea 
-                            style={{ "height": "200px" }}
-                            defaultValue={sampleRes[currentIndex][0]}
-                            onChange={(e) => {
-                                textChanged(e);
-                                setCurrentText(e.target.value);
-                              }} > 
-                        </textarea>
+                    <div style = {{ "width" : "50%"}} className="response">
+                        <div style = {{"marginBottom": "10px", "display" : "flex", "justifyContent": "space-between"}}>
+                            <Button variant="primary" style = {{"backgroundColor": "#005ca4" }} onClick={handlePrevClick}>Prev </Button>
+                            <Button variant="primary"  style = {{"backgroundColor": "#005ca4" }} onClick={handleNextClick}>Next </Button>
+                        </div>
+                        <div style={{"borderStyle" : "solid", "marginBottom": "10px", "padding": "10px"}}>
+                            <p> <b>Category:</b> {sampleRes[currentIndex][1]}</p>
+                            <p> <b>Original Inquiry:</b> {sampleRes[currentIndex][2]} </p>
+                        </div>
+                        <div style = {{"display" : "flex", "alignItems" : "center"}}>
+                            <div style={{"width" : "100%"}}>
+                                <textarea 
+                                    style={{ "height": "200px", "width": "100%"}}
+                                    defaultValue = {sampleRes[currentIndex][0]}
+                                    value={currentText}
+                                    onChange={(e) => {
+                                        textChanged(e);
+                                        setCurrentText(e.target.value);
+                                    }} > 
+                                </textarea>
+                            </div>  
+                            <Button variant="primary"  style = {{"backgroundColor": "#005ca4", "height" : "50%", "marginLeft" : "20px" }} onClick={createReplyToThread}>Send to HelpScout</Button>
+                        </div>                     
                     </div>
-                    <button className="next" onClick={handleNextClick}>Next</button>
+                
                 </div>
-                <Button variant="primary" onClick={createReplyToThread}>Send to HelpScout</Button>
             </>
         }
     </>
