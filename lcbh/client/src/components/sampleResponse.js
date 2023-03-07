@@ -1,15 +1,25 @@
 import { useState, useEffect } from "react"
 
 function SampleResponse({ sampleRes, textChanged, currentText, setCurrentText }) {
-
+    
     const [currentIndex, setCurrentIndex] = useState(0);
+    console.log(sampleRes[currentIndex])
+    console.log("whole sample res", sampleRes)
+    
+
 
     const handlePrevClick = () => {
+      console.log("before change: ", currentIndex);
       setCurrentIndex((currentIndex - 1 + sampleRes.length) % sampleRes.length);
+      console.log("after change", currentIndex);
+      setCurrentText(sampleRes[currentIndex][0]);
     };
   
     const handleNextClick = () => {
+     console.log("before change: ", currentIndex);
       setCurrentIndex((currentIndex + 1) % sampleRes.length);
+      console.log("after change: ", currentIndex);
+      setCurrentText(sampleRes[currentIndex][0]);
     };
 
     useEffect(() => {
@@ -20,7 +30,9 @@ function SampleResponse({ sampleRes, textChanged, currentText, setCurrentText })
             if(res[0].startsWith('            '))
                 res[0] = res[0].split('            ')[1]
         })
+
     }, [sampleRes])
+      
 
     return (
     <>
@@ -34,12 +46,13 @@ function SampleResponse({ sampleRes, textChanged, currentText, setCurrentText })
                         <p>Original Inquiry: {sampleRes[currentIndex][2]}</p>
                         <textarea 
                             style={{ "height": "200px" }}
-                            defaultValue={sampleRes[currentIndex][0]}
+                            value={currentText}
                             onChange={(e) => {
                                 textChanged(e);
                                 setCurrentText(e.target.value);
                               }} > 
                         </textarea>
+
                     </div>
                     <button className="next" onClick={handleNextClick}>Next</button>
                 </div>
