@@ -3,6 +3,7 @@ from sklearn import model_selection
 from sklearn import neighbors
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.impute import SimpleImputer
+import re
 
 
 
@@ -22,7 +23,27 @@ class responseGenerator():
         #prediction = self.model.predict(trial_v)          #predict response
         #return prediction[0,0], prediction[0,1], prediction[0,2]
         predictions = self.model.kneighbors(trial_v)
-        return self.dataframe.iloc[predictions[1][0], :][["Answer","Answer Category","Inquiry"]].values.tolist()
+        return self.clean_response(self.dataframe.iloc[predictions[1][0], :][["Answer","Answer Category","Inquiry"]].values.tolist())
+
+    def clean_response(self, responses_list):
+        #print("list: ", responses_list)
+        for i in range(len(responses_list)):
+            response_list = responses_list[i]
+            text_answer = response_list[0]
+            text_answer = text_answer.strip()
+            possible_text = self.regex_cleaner(text_answer)
+            if possible_text:
+                text_answer = possible_text
+            responses_list[i][0] = text_answer
+        return responses_list
+
+    def regex_cleaner(self, text):
+        pattern = r'Question:.*Answer:\s*(.*)'
+        match = re.search(pattern, text, re.DOTALL)
+        if match:
+            return match.group(1).strip()
+        return None
+
 
     def add_data(self,inquiry,response,category):
         new_row = {'Inquiry':[inquiry],
@@ -55,9 +76,9 @@ class responseGenerator():
 
 
 rG = responseGenerator(dataset_file= r"Help_Desk_Data_Cleaned_for_Category_Model_Mark_2.csv",n_neighbors=5)
-#print(rG.get_response("Help, my landlord is trying to evict me!"))
+print(rG.get_response(" My land lord is herrassing me with Textes and is giving me a hard time since I cought them in my apartment then they text me to try and cover there back but they text me 30 minutes after they left I never gave anyone permission to go into my apartment also the 5 windows in my apt have mold in them and do not close or work they slam open when the wind blows "))
 #print(rG.get_response("I don't have enough money for rent this month"))
 
-rG.add_data("Hello there 123","This is an answer","Eviction")
+#rG.add_data("Hello there 123","This is an answer","Eviction")
 
 #print(rG.get_response("Hello 123"))
