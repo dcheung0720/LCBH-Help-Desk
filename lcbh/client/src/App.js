@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 function App() {
   const [access_token, set_access_token] = useState(undefined);
   const [customerID, setCustomerID] = useState(0)
+  const [threads, setThreads] = useState(undefined);
 
   // getting conversation id
   const link = window.location.href.split("/");
@@ -59,8 +60,8 @@ function App() {
       {
         access_token ? 
           <>
-            <Threads access_token={access_token.access_token} conv_id={conv_id} />
-            <InquiryForm access_token={access_token.access_token} conv_id={conv_id} customerID={customerID}></InquiryForm>
+            <InquiryForm access_token={access_token.access_token} conv_id={conv_id} customerID={customerID} threads = {threads}></InquiryForm>
+            <Threads threads={ threads} setThreads = {setThreads} access_token={access_token.access_token} conv_id={conv_id} />
           </> : <></>}
     </div>
   )

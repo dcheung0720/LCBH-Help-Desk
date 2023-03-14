@@ -3,8 +3,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 
 
-function Threads({access_token, conv_id}){
-    const [threads, setThreads] = useState(undefined);
+function Threads({access_token, threads, setThreads, conv_id}){
 
     useEffect(() =>{
         getThreads();
@@ -20,7 +19,7 @@ function Threads({access_token, conv_id}){
         })
         .then(res => res.json())
         //set threads state
-        .then(data =>{setThreads( data._embedded.threads);}
+        .then(data =>{setThreads( data._embedded.threads.reverse());}
         );
     }
 
@@ -28,7 +27,7 @@ function Threads({access_token, conv_id}){
         <Container fluid="md">
             {threads.map(thread =>
                 <Row style ={{borderStyle: "solid", marginBottom: "10px", padding: "15px"}}>{thread.body}</Row>
-            ) }p
+            )}
         </Container> : <></>)
 
 }
