@@ -3,7 +3,20 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 
 
-function Threads({access_token, threads, setThreads, conv_id}){
+function Threads({access_token, threads, setThreads, conv_id,user_inquiry, setInquiry}){
+
+    useEffect(()=>{
+        if(threads !== undefined){
+            let thread_concat = threads.reduce((txt_cat, cur) => txt_cat + cur.body, '')
+            if(thread_concat !== ''){
+                const regex = new RegExp(/Inquiry:\s*(.*?)</);
+                const match = regex.exec(thread_concat);
+                setInquiry(match[1])
+            }
+        }
+    }, [threads])
+
+
 
     useEffect(() =>{
         getThreads();

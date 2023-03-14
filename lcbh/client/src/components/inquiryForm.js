@@ -5,17 +5,21 @@ import './inquiryForm.css';
 import SampleResponse from './sampleResponse';
 
 
-function InquiryForm({access_token, conv_id, customerID, threads}){
+function InquiryForm({access_token, conv_id, customerID, threads, user_inquiry, setInquiry}){
     const [sampleRes, setSampleRes] = useState([]);
     const [currentText, setCurrentText] = useState('');
     const textChanged = (event) => {
       setCurrentText(event.target.value);
     };
+    const inquiryChanged = (event) => {
+      setInquiry(event.target.value);
+    };
 
-    
+    console.log(user_inquiry)
     return(<div style = {{"display" : "flex", "justifyContent" : "center", "height" : "500px"}}>
           <div style = {{"width" : "50%", "margin" : "10px"}}>
             <h1> Most Recent Inquiry</h1>
+
             <Formik
               initialValues={{ inquiry: [] }}
               onSubmit={(values) => {
@@ -28,7 +32,7 @@ function InquiryForm({access_token, conv_id, customerID, threads}){
                       "Access-Control-Allow-Origin": "*"
                     },
                     body: JSON.stringify({
-                      inquiry: values.inquiry
+                      inquiry: user_inquiry
                     })
                   })
                     .then(res => res.json())
@@ -49,20 +53,27 @@ function InquiryForm({access_token, conv_id, customerID, threads}){
                 handleSubmit,
                 isSubmitting,
                 /* and other goodies */
-              }) => (
+              }) =>{  
+                
+                function handleCombinedChange(event) {
+                  inquiryChanged(event);
+                  handleChange(event);
+                }
+
+                return(
                 <form>
                   <div className = "input">
                   <textarea
                     name="inquiry"
-                    onChange={handleChange}
+                    onChange={handleCombinedChange}
                     onBlur={handleBlur}
-                    value={values.inquiry}
+                    value={user_inquiry}
                     style = {{"width" : "90%", "marginRight": "13px", "height" : "333px"}}
                   />
                   <Button type="submit"  style = {{"backgroundColor": "#005ca4" }} onClick ={handleSubmit} variant="primary">Submit</Button>
                   </div>
                 </form>
-              )}
+              )}}
             
             </Formik>
           </div>

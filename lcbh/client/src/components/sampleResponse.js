@@ -17,7 +17,7 @@ function SampleResponse({ sampleRes, currentText, setCurrentText, access_token, 
 
 
     const createReplyToThread = () => {
-        fetch(`https://api.helpscout.net/v2/conversations/${conv_id}/reply`, {
+        fetch(`https://api.helpscout.net/v2/conversations/${conv_id}/notes`, {
             method: "POST",
             headers: {
                 "Content-Type": 'application/json',
