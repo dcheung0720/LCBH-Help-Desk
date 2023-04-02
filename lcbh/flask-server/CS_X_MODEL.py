@@ -4,6 +4,8 @@ from sklearn import neighbors
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.impute import SimpleImputer
 from mongo_import import get_df_from_mongodb, add_row_to_mongodb
+from sklearn.metrics.pairwise import cosine_distances
+from responseCombine import combine_two_responses
 
 CONNECTION_STRING = "mongodb+srv://jackdaenzer2024:eZUnYSdbNJuzvH9U@csx-lcbh.us3nupa.mongodb.net/csx-lcbh"
 
@@ -14,7 +16,7 @@ class responseGenerator():
         df = df.dropna(subset=['Answer']) #remove pairs without a response (all rows in data have an inquiry)
         self.dataframe = df
         self.n_neighbors = n_neighbors
-        self.stop_words = ['help','been', 'has', 'by', 'when', 'also', 'had', 'want', 'any', 'just', 'our', 'my', 'helpscout', 'about', 'are', 'if', 'issues', 'be', 'on', 've', 'don', 'is', 'she', 'did', 'can', 'it', 'since', 'like', 'to', 'them', 'us', 'no', 'previous', 'with', 'secure', 'back', 'me', 'net', 'do', 'without', 'told', 'an', 'and', 'there', 'have', 'from', 'legal', 'not', 'https', 'the', 'that', 'what', 'in', 'need', 'because', 'at', 'being', 'am', 'trying', 'will', 'rent', 'of', 'new', 'they', 'how', 'after', 'as', 'still', 'due', 'was', 'know', 'for', 'building', 'would', 'now', 'you', 'or', 'received', 'he', 'issue', 'get', 'we', 'but', 'all', 'so', 'this']
+        self.stop_words = ['someone','hello','help','been', 'has', 'by', 'when', 'also', 'had', 'want', 'any', 'just', 'our', 'my', 'helpscout', 'about', 'are', 'if', 'issues', 'be', 'on', 've', 'don', 'is', 'she', 'did', 'can', 'it', 'since', 'like', 'to', 'them', 'us', 'no', 'previous', 'with', 'secure', 'back', 'me', 'net', 'do', 'without', 'told', 'an', 'and', 'there', 'have', 'from', 'legal', 'not', 'https', 'the', 'that', 'what', 'in', 'need', 'because', 'at', 'being', 'am', 'trying', 'will', 'rent', 'of', 'new', 'they', 'how', 'after', 'as', 'still', 'due', 'was', 'know', 'for', 'building', 'would', 'now', 'you', 'or', 'received', 'he', 'issue', 'get', 'we', 'but', 'all', 'so', 'this']
 
         self.fit_responses()
         
@@ -26,7 +28,31 @@ class responseGenerator():
         #prediction = self.model.predict(trial_v)          #predict response
         #return prediction[0,0], prediction[0,1], prediction[0,2]
         predictions = self.model.kneighbors(trial_v)
-        return self.dataframe.iloc[predictions[1][0], :][["Answer","Answer Category","Inquiry"]].values.tolist()
+        #print(predictions)
+        inquiries = self.dataframe.iloc[predictions[1][0], :]["Inquiry"].values.tolist()
+        categories = self.dataframe.iloc[predictions[1][0], :]["Answer Category"].values.tolist()
+        responses = self.dataframe.iloc[predictions[1][0], :]["Answer"].values.tolist()
+        #print(inquiries)
+        dist_between = 0.9
+        dist_diff = 0.15
+        #for i in range(len(inquiries)-1):
+        combined_response = None
+        combined_category = None
+        combined_inquiry = None
+        i=0
+        for j in range(1,len(inquiries)):
+            if(self.inquiries_distance(inquiries[i],inquiries[j]) > dist_between and (abs(predictions[0][0][i]-predictions[0][0][j])<dist_diff)):
+                print(inquiries[i],":::",inquiries[j],":::",self.inquiries_distance(inquiries[i],inquiries[j]),":::",predictions[0][0][i],predictions[0][0][j])
+                combined_response = combine_two_responses(responses[i],responses[j])
+                combined_category = categories[i] + " / " + categories[j]
+                combined_inquiry = inquiries[i] + " / " + inquiries[j]
+            if combined_response != None: break
+
+        final_return = self.dataframe.iloc[predictions[1][0], :][["Answer","Answer Category","Inquiry"]].values.tolist()
+        if combined_response == None:
+            return final_return
+        else:
+            return [[combined_response,combined_category,combined_inquiry]] + final_return
 
     def add_data(self,inquiry,response,category):
         new_row = {'Inquiry':[inquiry],
@@ -55,5 +81,16 @@ class responseGenerator():
         self.vectorizer = tfidf                  #save our model and vectorizer for predictions
         #self.dataframe = df
         
-        
+    def inquiries_distance(self, inquiry1, inquiry2):
+        i1 = self.vectorizer.transform([inquiry1])
+        i2 = self.vectorizer.transform([inquiry2])
+        return cosine_distances(i1,i2)
 
+#rg = responseGenerator(n_neighbors = 5)
+#inquiry = "I have no heat, no boiler, uncomplete bathroom rats and roaches."
+#inquiry = "My heat isn't working and my landlord is unresponsive"
+#inquiry = "Hello my landlord won't give me a copy of the lease."
+#inquiry = "I have roaches and my landlord is evicting me"
+#inquiry = "My apartment had a fire and I am now homeless"
+#response = rg.get_response(inquiry)
+#print(response[0])

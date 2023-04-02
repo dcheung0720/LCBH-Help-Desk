@@ -16,12 +16,10 @@ def get_df_from_mongodb(c_string):
    return df
 
 #my_col = get_database()["CS_X LCBH Database"]
-<<<<<<< HEAD
 
 
 #df = pd.DataFrame(list(my_col.find()))
 #print(get_df_from_mongodb("mongodb+srv://jackdaenzer2024:eZUnYSdbNJuzvH9U@csx-lcbh.us3nupa.mongodb.net/csx-lcbh")["Inquiry"])
-=======
 def add_row_to_mongodb(c_string,new_row):
    client = MongoClient(c_string)
    my_db = client['csxdb']
@@ -39,4 +37,3 @@ def add_row_to_mongodb(c_string,new_row):
 #            'Answer Category':"A TEST 123"}
 
 # add_row_to_mongodb(db_string,new_row)
->>>>>>> 7be86a7940e9c754705ecb2fa4d8a6c591269840
