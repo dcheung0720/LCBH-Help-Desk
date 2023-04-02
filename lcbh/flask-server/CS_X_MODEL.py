@@ -4,12 +4,14 @@ from sklearn import neighbors
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.impute import SimpleImputer
 from mongo_import import get_df_from_mongodb, add_row_to_mongodb
+import translation as translate
 
 CONNECTION_STRING = "mongodb+srv://jackdaenzer2024:eZUnYSdbNJuzvH9U@csx-lcbh.us3nupa.mongodb.net/csx-lcbh"
 
+
 class responseGenerator():
     def __init__(self, n_neighbors):
-        # df = pd.read_csv(dataset_file)    #read csv of all past inquiry-response combinations
+        #df = pd.read_csv(dataset_file)    #read csv of all past inquiry-response combinations
         df = get_df_from_mongodb(CONNECTION_STRING)
         df = df.dropna(subset=['Answer']) #remove pairs without a response (all rows in data have an inquiry)
         self.dataframe = df
@@ -55,5 +57,3 @@ class responseGenerator():
         self.vectorizer = tfidf                  #save our model and vectorizer for predictions
         #self.dataframe = df
         
-        
-
