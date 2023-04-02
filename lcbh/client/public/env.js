@@ -1,4 +1,4 @@
 window.env = {
-  "CLIENT_ID": "oBIbqxY4HWGfeJydgdRbCyRsOBFW6YnK",
-  "CLIENT_SECRET": "VDog2r1MAXEnClbXnvE6FCELGbfNieel"
+  "CLIENT_ID": "iJyuqUGsmezplrZ9O7KzlmCOhxcmvrfM",
+  "CLIENT_SECRET": "DTceQ9WmO5sNUPbnwGYsyy0OQq3qXXft"
 };
