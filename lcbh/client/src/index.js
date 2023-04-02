@@ -12,8 +12,8 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <>
-    <Navbar bg="dark" expand="dark">
-    <Container style ={{"marginLeft" : "15px"}}>
+    <Navbar style = {{"backgroundColor": "#005ca4" }}>
+    <Container style ={{"marginLeft" : "15px", }}>
       <Navbar.Brand style ={{"color" : "white", "fontSize" : "25px"}} href="#home">LCBH Help Desk</Navbar.Brand>
       {/* <Navbar.Toggle aria-controls="basic-navbar-nav" /> */}
       {/* <Navbar.Collapse id="basic-navbar-nav"> */}
