@@ -6,15 +6,15 @@ function SampleResponse({ sampleRes, currentText, setCurrentText, access_token, 
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const handlePrevClick = () => {
-      setCurrentIndex((currentIndex - 1 + sampleRes.length) % sampleRes.length);
-      setCurrentText(sampleRes[currentIndex][0])
-    };
-  
-    const handleNextClick = () => {
-      setCurrentIndex((currentIndex + 1) % sampleRes.length);
-      setCurrentText(sampleRes[currentIndex][0])
-    };
-
+        setCurrentIndex(currentIndex => (currentIndex - 1 + sampleRes.length) % sampleRes.length);
+        setCurrentText(sampleRes[currentIndex][0])
+      };
+      
+      const handleNextClick = () => {
+        setCurrentIndex(currentIndex => (currentIndex + 1) % sampleRes.length);
+        const mod_ind = currentIndex % sampleRes.length;
+        setCurrentText(sampleRes[mod_ind][0]);
+      };
 
     const createReplyToThread = () => {
         fetch(`https://api.helpscout.net/v2/conversations/${conv_id}/notes`, {
@@ -44,7 +44,7 @@ function SampleResponse({ sampleRes, currentText, setCurrentText, access_token, 
         })
         if(sampleRes.length > 0)
             setCurrentText(sampleRes[currentIndex][0]);
-    }, [sampleRes])
+    }, [sampleRes, currentIndex, setCurrentText])
 
 
     return (
@@ -70,6 +70,7 @@ function SampleResponse({ sampleRes, currentText, setCurrentText, access_token, 
                                     value={currentText}
                                     onChange={(e) => {
                                         setCurrentText(e.target.value);
+                                        console.log(e.target.value);
                                     }} > 
                                 </textarea>
                             </div>  
