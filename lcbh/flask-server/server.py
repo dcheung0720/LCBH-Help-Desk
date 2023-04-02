@@ -9,7 +9,7 @@ CORS(app)
 def home():
     if request.method == "POST":
         text = request.json.get("inquiry")
-        rg = responseGenerator(dataset_file= r"Help_Desk_Data_Cleaned_for_Category_Model_Mark_2.csv", n_neighbors=3)
+        rg = responseGenerator(n_neighbors=10)
         # response = rg.get_response(text)[0]
         # cat = rg.get_response(text)[1]
         

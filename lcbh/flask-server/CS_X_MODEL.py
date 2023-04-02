@@ -66,7 +66,7 @@ rG = responseGenerator(n_neighbors=1)
 #print(rG.get_response("I don't have enough money for rent this month"))
 
 print(rG.get_response("Hello 123"))
-rG.add_data("Hello there 123","This is an answer","Eviction")
+#rG.add_data("Hello there 123","This is an answer","Eviction")
 rG2 = responseGenerator(n_neighbors=1)
 print(rG2.get_response("Hello 123"))
 
