@@ -9,7 +9,7 @@ CORS(app)
 def home():
     if request.method == "POST":
         text = request.json.get("inquiry")
-        rg = responseGenerator(n_neighbors=3)
+        rg = responseGenerator(n_neighbors = 5)
         # response = rg.get_response(text)[0]
         # cat = rg.get_response(text)[1]
         
