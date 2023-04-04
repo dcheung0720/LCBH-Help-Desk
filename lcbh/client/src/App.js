@@ -50,12 +50,12 @@ function App() {
       )
       .catch(err => console.log(err))
   }
-
+  
   // authenticate us
   useEffect(() => {
-    authenticate()
+    authenticate();
   }, [])
-
+  
   return (
     <div className="content">
       {
