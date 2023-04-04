@@ -8,13 +8,10 @@ from translate_model import translate_pressed, detect_inquiry_language
 app = Flask(__name__)
 CORS(app)
 
-lang = "en"
-
 
 @app.route("/lang", methods = ["POST"])
 def default_lang():
     if request.method == "POST":
-        print("kdfjgnekfmjrhnesfkmjnfnjsafnasjfas")
         lang = detect_inquiry_language(request.json.get("inquiry"))
         return jsonify({"lang": lang})
 
@@ -53,7 +50,9 @@ def home():
 @app.route("/translation", methods = ["POST"])
 def translate():
     if request.method == "POST":
-        translated = translate_pressed(request.json.get("inquiry"), lang)
+        print(request.json.get("inquiry"))
+        print(request.json.get("lang"))
+        translated = translate_pressed(request.json.get("inquiry"), request.json.get("lang"))
         return jsonify({"translation": translated})
         
 

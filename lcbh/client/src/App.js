@@ -12,6 +12,7 @@ function App() {
   const [customerID, setCustomerID] = useState(0)
   const [threads, setThreads] = useState(undefined);
   const [user_inquiry, setInquiry] = useState(undefined);
+  const [lang, setLang] = useState("en");
 
   // getting conversation id
   const link = window.location.href.split("/");
@@ -61,8 +62,8 @@ function App() {
       {
         access_token ? 
           <>
-            <InquiryForm access_token={access_token.access_token} conv_id={conv_id} customerID={customerID} threads = {threads} user_inquiry = {user_inquiry} setInquiry = {setInquiry} ></InquiryForm>
-            <Threads threads={ threads} setThreads = {setThreads} access_token={access_token.access_token} conv_id={conv_id} user_inquiry= {user_inquiry} setInquiry = {setInquiry}/>
+            <InquiryForm access_token={access_token.access_token} conv_id={conv_id} customerID={customerID} threads = {threads} user_inquiry = {user_inquiry} setInquiry = {setInquiry} lang = {lang} setLang = {setLang} ></InquiryForm>
+            <Threads threads={ threads} setThreads = {setThreads} access_token={access_token.access_token} conv_id={conv_id} user_inquiry= {user_inquiry} setInquiry = {setInquiry} lang= {lang} setLang = {setLang}/>
           </> : <></>}
     </div>
   )

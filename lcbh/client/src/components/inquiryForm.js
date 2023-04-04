@@ -5,7 +5,7 @@ import './inquiryForm.css';
 import SampleResponse from './sampleResponse';
 
 
-function InquiryForm({access_token, conv_id, customerID, threads, user_inquiry, setInquiry}){
+function InquiryForm({access_token, conv_id, customerID, threads, user_inquiry, setInquiry, lang, setLang}){
     const [sampleRes, setSampleRes] = useState([]);
     const [currentText, setCurrentText] = useState('');
     const textChanged = (event) => {
@@ -78,6 +78,7 @@ function InquiryForm({access_token, conv_id, customerID, threads, user_inquiry, 
           });
           break;
         case 'translate':
+          console.log(lang)
           setTimeout(() => {
             fetch("http://localhost:5000/translation",
             {
@@ -87,12 +88,14 @@ function InquiryForm({access_token, conv_id, customerID, threads, user_inquiry, 
                 "Access-Control-Allow-Origin": "*"
               },
               body: JSON.stringify({
-                inquiry: user_inquiry
+                inquiry: user_inquiry,
+                lang: lang
               })
             })
               .then(res => res.json())
               .then(data =>{ 
                 console.log(data)
+                setInquiry(data["translation"]);
               })
               .catch(err => console.log(err))
           });
