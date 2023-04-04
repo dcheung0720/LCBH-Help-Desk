@@ -78,8 +78,24 @@ function InquiryForm({access_token, conv_id, customerID, threads, user_inquiry, 
           });
           break;
         case 'translate':
-          console.log('Submitting form with values:', values);
-          // Add code to submit form here
+          setTimeout(() => {
+            fetch("http://localhost:5000/translation",
+            {
+              method: "POST",
+              headers:{
+                "Content-Type": 'application/json',
+                "Access-Control-Allow-Origin": "*"
+              },
+              body: JSON.stringify({
+                inquiry: user_inquiry
+              })
+            })
+              .then(res => res.json())
+              .then(data =>{ 
+                console.log(data)
+              })
+              .catch(err => console.log(err))
+          });
           break;
         default:
           console.log('Unknown submit action:', values.submitAction);
