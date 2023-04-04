@@ -3,7 +3,9 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 
 
-function Threads({access_token, threads, setThreads, conv_id,user_inquiry, setInquiry}){
+function Threads({access_token, threads, setThreads, conv_id,user_inquiry, setInquiry, lang, setLang}){
+
+    const [fetched, setFetched] = useState(false);
 
     useEffect(()=>{
         if(threads !== undefined){
@@ -13,7 +15,8 @@ function Threads({access_token, threads, setThreads, conv_id,user_inquiry, setIn
                 const match = regex.exec(thread_concat);
                 if(user_inquiry === undefined)
                     setInquiry(match[1])
-                if(user_inquiry !== undefined){
+                if(user_inquiry !== undefined  && !fetched){
+                    setFetched(true);
                     fetch('http://localhost:5000/lang',{
                         method: "POST",
                         headers:{
@@ -21,16 +24,17 @@ function Threads({access_token, threads, setThreads, conv_id,user_inquiry, setIn
                         "Access-Control-Allow-Origin": "*"
                         },
                         body: JSON.stringify({
-                        inquiry: user_inquiry
+                            inquiry: user_inquiry
                         })
                     }).then(res => res.json())
-                    .then(data => console.log(data))
+                    .then(data => {console.log(data); 
+                                    setLang(data["lang"])
+                                    console.log(lang)})
                     .catch(err => console.log(err))
                 }
             }
         }
     }, [threads, user_inquiry])
-
 
 
     useEffect(() =>{
