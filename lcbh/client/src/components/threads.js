@@ -11,10 +11,25 @@ function Threads({access_token, threads, setThreads, conv_id,user_inquiry, setIn
             if(thread_concat !== ''){
                 const regex = new RegExp(/Inquiry:\s*(.*?)</);
                 const match = regex.exec(thread_concat);
-                setInquiry(match[1])
+                if(user_inquiry === undefined)
+                    setInquiry(match[1])
+                if(user_inquiry !== undefined){
+                    fetch('http://localhost:5000/lang',{
+                        method: "POST",
+                        headers:{
+                        "Content-Type": 'application/json',
+                        "Access-Control-Allow-Origin": "*"
+                        },
+                        body: JSON.stringify({
+                        inquiry: user_inquiry
+                        })
+                    }).then(res => res.json())
+                    .then(data => console.log(data))
+                    .catch(err => console.log(err))
+                }
             }
         }
-    }, [threads])
+    }, [threads, user_inquiry])
 
 
 
