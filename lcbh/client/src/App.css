@@ -41,3 +41,16 @@
   margin: 25px;
   margin-left: 35px;
 }
+
+.button:hover{
+  opacity: .75;
+}
+
+.button:active{
+  opacity: .85;
+}
+
+#responseButton{
+  display: flex;
+  margin-left: 10px;
+}

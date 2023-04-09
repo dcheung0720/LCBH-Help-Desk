@@ -80,15 +80,15 @@ function SampleResponse({ sampleRes, currentText, setCurrentText, access_token, 
 
     return (
     <>
-        <h1>Sample response:</h1>
+        <h1>Sample Response</h1>
         {
             sampleRes.length !== 0 && 
             <>
                 <div className="carousel" >
                     <div style = {{ "width" : "100%",  "height": "350px"}} className="response">
                         <div style = {{"marginBottom": "10px", "display" : "flex", "justifyContent": "space-between"}}>
-                            <Button variant="primary" style = {{"backgroundColor": "#005ca4" }} onClick={handlePrevClick}>Prev </Button>
-                            <Button variant="primary"  style = {{"backgroundColor": "#005ca4" }} onClick={handleNextClick}>Next </Button>
+                            <Button className  = "button" variant="primary" style = {{"backgroundColor": "#005ca4" }} onClick={handlePrevClick}>Prev </Button>
+                            <Button className  = "button" variant="primary"  style = {{"backgroundColor": "#005ca4" }} onClick={handleNextClick}>Next </Button>
                         </div>
                         <div style={{"borderStyle" : "solid", "marginBottom": "10px", "padding": "10px", "height": "30%", "overflowY" : "scroll"}}>
                             <p> <b>Category:</b> {sampleRes[currentIndex][1]}</p>
@@ -117,20 +117,23 @@ function SampleResponse({ sampleRes, currentText, setCurrentText, access_token, 
                                     <Form onSubmit={handleSubmit}>
                                     <div className = "input">
                                     <textarea 
-                                    style={{"width": "100%", "height" : "100%", "padding": "none"}}
+                                    style={{"width": "100%", "height" : "175px", "padding": "none"}}
                                     value={currentText}
                                     onChange={(e) => {
                                         setCurrentText(e.target.value);
                                         console.log(e.target.value);
                                     }} > 
                                     </textarea>
-                                    <Button type="submit"  style = {{"backgroundColor": "#005ca4" }} variant="primary" onClick = {() =>{handleTranslate();}} name = "submitAction" value = "translate">Translate</Button>
+                                    <div id = "responseButton"> 
+                                        <Button className  = "button" type="submit"  style = {{"backgroundColor": "#a44800" }} variant="primary" onClick = {() =>{handleTranslate();}} name = "submitAction" value = "translate">Translate</Button>
+                                        <Button className  = "button" variant="primary"  style = {{"backgroundColor": "#005ca4", "height" : "40%", "marginLeft" : "20px" }} onClick={createReplyToThread}>Send to HelpScout</Button>
+                                    </div>
                                     </div>
                                     </Form>
                                 )}}
                             </Formik>  
                             </div>  
-                            <Button variant="primary"  style = {{"backgroundColor": "#005ca4", "height" : "40%", "marginLeft" : "20px" }} onClick={createReplyToThread}>Send to HelpScout</Button>
+                    
                         </div>                     
                     </div>
                 

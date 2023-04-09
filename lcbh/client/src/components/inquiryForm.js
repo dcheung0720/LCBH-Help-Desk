@@ -102,9 +102,11 @@ function InquiryForm({access_token, conv_id, customerID, threads, user_inquiry, 
                     style = {{"width" : "90%", "marginRight": "13px", "height" : "333px"}}
                   />
                   <div>
-                    <Button id = "button" type="submit"  style = {{"backgroundColor": "#005ca4" }} variant="primary" onClick = {() =>{submitAction = "submit"; handleSubmit();}} name = "submitAction" value = "submit">Generate Response</Button>
+                    <Button className = "button" id = "button" type="submit"  style = {{"backgroundColor": "#a44800" }} variant="primary" onClick = {() =>{submitAction = "translate"; handleSubmit();}} name = "submitAction" value = "translate">Translate</Button>
                     
-                    <Button id = "button" type="submit"  style = {{"backgroundColor": "#005ca4" }} variant="primary" onClick = {() =>{submitAction = "translate"; handleSubmit();}} name = "submitAction" value = "translate">Translate</Button>
+                    <Button className = "button" id = "button" type="submit"  style = {{"backgroundColor": "#005ca4" }} variant="primary" onClick = {() =>{submitAction = "submit"; handleSubmit();}} name = "submitAction" value = "submit">Generate Response</Button>
+                    
+          
                   </div>
                   </div>
                 </Form>
