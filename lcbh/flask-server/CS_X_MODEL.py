@@ -7,6 +7,7 @@ from mongo_import import get_df_from_mongodb, add_row_to_mongodb
 import translation as translate
 from responseCombine import combine_two_responses
 from sklearn.metrics.pairwise import cosine_distances
+import re
 
 CONNECTION_STRING = "mongodb+srv://jackdaenzer2024:eZUnYSdbNJuzvH9U@csx-lcbh.us3nupa.mongodb.net/csx-lcbh"
 
