@@ -1,22 +1,27 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect } from "react";
+import { Formik, Form, Field } from 'formik';
 import Button from 'react-bootstrap/Button';
 
-function SampleResponse({ sampleRes, currentText, setCurrentText, access_token, conv_id, customerID}) {
+function SampleResponse({ sampleRes, currentText, setCurrentText, access_token, conv_id, customerID, lang}) {
 
     const [currentIndex, setCurrentIndex] = useState(0);
 
+    // go to previous response
     const handlePrevClick = () => {
         setCurrentIndex(currentIndex => (currentIndex - 1 + sampleRes.length) % sampleRes.length);
         setCurrentText(sampleRes[currentIndex][0])
-      };
+    };
       
-      const handleNextClick = () => {
-        setCurrentIndex(currentIndex => (currentIndex + 1) % sampleRes.length);
-        const mod_ind = currentIndex % sampleRes.length;
-        setCurrentText(sampleRes[mod_ind][0]);
-      };
+    //go to the next response
+    const handleNextClick = () => {
+    setCurrentIndex(currentIndex => (currentIndex + 1) % sampleRes.length);
+    const mod_ind = currentIndex % sampleRes.length;
+    setCurrentText(sampleRes[mod_ind][0]);
+    };
 
+    //creat reply thread
     const createReplyToThread = () => {
+        navigator.clipboard.writeText(currentText);
         fetch(`https://api.helpscout.net/v2/conversations/${conv_id}/notes`, {
             method: "POST",
             headers: {
@@ -32,7 +37,33 @@ function SampleResponse({ sampleRes, currentText, setCurrentText, access_token, 
         })
         .then(() => console.log("Reply was sent!"))
         .catch(err => console.log(err))
+        .then(() => window.close());
     }
+
+    const handleTranslate = (values, { setSubmitting }) => {
+        // Check which submit button was clicked and perform the corresponding action
+            console.log(lang)
+            setTimeout(() => {
+              fetch("http://localhost:5000/translation",
+              {
+                method: "POST",
+                headers:{
+                  "Content-Type": 'application/json',
+                  "Access-Control-Allow-Origin": "*"
+                },
+                body: JSON.stringify({
+                  inquiry: currentText,
+                  lang: lang
+                })
+              })
+                .then(res => res.json())
+                .then(data =>{ 
+                  console.log(data)
+                  setCurrentText(data["translation"]);
+                })
+                .catch(err => console.log(err))
+            });    
+      };
 
     useEffect(() => {
         sampleRes.forEach((res) => {
@@ -65,14 +96,39 @@ function SampleResponse({ sampleRes, currentText, setCurrentText, access_token, 
                         </div>
                         <div style = {{"display" : "flex", "alignItems" : "center", "height": "50%"}}>
                             <div style={{"width" : "100%", "height" : "100%"}}>
-                                <textarea 
+                            <Formik
+                                initialValues={{ inquiry: [] }}
+
+                                onSubmit={handleTranslate}
+
+                                >
+                                {({
+                                    handleChange,
+                                    handleBlur,
+                                    handleSubmit,
+                                    /* and other goodies */
+                                }) =>{  
+                                    
+                                    function handleCombinedChange(event) {
+                                    handleChange(event);
+                                    }
+
+                                    return(
+                                    <Form onSubmit={handleSubmit}>
+                                    <div className = "input">
+                                    <textarea 
                                     style={{"width": "100%", "height" : "100%", "padding": "none"}}
                                     value={currentText}
                                     onChange={(e) => {
                                         setCurrentText(e.target.value);
                                         console.log(e.target.value);
                                     }} > 
-                                </textarea>
+                                    </textarea>
+                                    <Button type="submit"  style = {{"backgroundColor": "#005ca4" }} variant="primary" onClick = {() =>{handleTranslate();}} name = "submitAction" value = "translate">Translate</Button>
+                                    </div>
+                                    </Form>
+                                )}}
+                            </Formik>  
                             </div>  
                             <Button variant="primary"  style = {{"backgroundColor": "#005ca4", "height" : "40%", "marginLeft" : "20px" }} onClick={createReplyToThread}>Send to HelpScout</Button>
                         </div>                     

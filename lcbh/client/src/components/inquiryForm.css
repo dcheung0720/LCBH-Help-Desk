@@ -17,3 +17,8 @@ textarea{
     border-color: black;
     height: 200px;
 }
+
+#button{
+    margin: 10px;
+    width: 60%;
+}

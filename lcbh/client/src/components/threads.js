@@ -34,13 +34,13 @@ function Threads({access_token, threads, setThreads, conv_id,user_inquiry, setIn
                 }
             }
         }
-    }, [threads, user_inquiry])
+    }, [threads, user_inquiry, fetched, lang, setInquiry, setLang])
 
 
     useEffect(() =>{
         getThreads();
     }, []);
-
+    
     function getThreads(){
         fetch(`https://api.helpscout.net/v2/conversations/${conv_id}/threads`, {
             method: "GET",
@@ -54,15 +54,8 @@ function Threads({access_token, threads, setThreads, conv_id,user_inquiry, setIn
         .then(data =>{setThreads( data._embedded.threads.reverse());}
         );
     }
-
-    return(threads?
-        <Container fluid="md">
-            {threads.map(thread =>
-                <Row style ={{borderStyle: "solid", marginBottom: "10px", padding: "15px"}}>{thread.body}</Row>
-            )}
-        </Container> : <></>)
-
 }
+
 
 
 export default Threads;
