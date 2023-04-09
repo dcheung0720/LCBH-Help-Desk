@@ -6,7 +6,6 @@ import langid
 #Takes in inquiry as a string (txt) and returns the english translated form of it
 # Right now I only call this for spanish inquiries, but potentially could use to translate all non-English questions and/or canned responses
 def translate_text(txt, lang, to_lang):
-    print("HELLO")
     translator = Translator(to_lang=to_lang, from_lang = lang)
     if len(txt) > 500:
         result = ""
@@ -16,7 +15,7 @@ def translate_text(txt, lang, to_lang):
             num_parts += 1
         print("NUM_PARTS=",num_parts)
         for i in range(num_parts):
-            result += translator.translate(txt[i*500:i*500+500],'es')
+            result += translator.translate(txt[i*500:i*500+500])
         return result
     
     translation = translator.translate(txt)
