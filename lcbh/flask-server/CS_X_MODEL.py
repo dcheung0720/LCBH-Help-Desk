@@ -54,7 +54,55 @@ class responseGenerator():
         if combined_response == None:
             return final_return
         else:
-            return [[combined_response,combined_category,combined_inquiry]] + final_return
+            return self.clean_response([[combined_response,combined_category,combined_inquiry]] + final_return)
+
+
+    def clean_response(self, responses_list):
+        for i in range(len(responses_list)):
+            response_list = responses_list[i]
+            text_answer = response_list[0]
+            text_answer = text_answer.strip()
+            possible_text = self.regex_cleaner(text_answer)
+            if possible_text:
+                text_answer = possible_text
+            
+            text_answer = self.append_links(text_answer, self.link_finder(text_answer))
+            responses_list[i][0] = text_answer
+        return responses_list
+
+    def regex_cleaner(self, text):
+        pattern = r'Question:.*Answer:\s*(.*)'
+        match = re.search(pattern, text, re.DOTALL)
+        if match:
+            return match.group(1).strip()
+        return None
+
+    def link_finder(self,text):
+        text = text.replace("\n", " ")
+        sentences = text.split(" ")
+        links = []
+        for sentence in sentences:
+            if 'http' in sentence:
+                index = sentence.find("http")
+                sentence = sentence[index:]
+                if sentence.endswith("."):
+                    sentence = sentence[:-1]
+                links.append(sentence)
+        return links
+
+    def append_links(self, text, links):
+        text = text.rstrip()
+        if len(links) == 0:
+            if "Links:" in text:
+                text = text.replace("Links:", "")
+            return text
+        
+        if not "Links:" in text:
+            text += "\n\nLinks: "
+        else: 
+            text = text.replace("Links:", "\n\nLinks: ")
+        text += ", ".join(links)
+        return text
 
     def add_data(self,inquiry,response,category):
         new_row = {'Inquiry':[inquiry],
