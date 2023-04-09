@@ -53,7 +53,7 @@ class responseGenerator():
        
         final_return = self.dataframe.iloc[predictions[1][0], :][["Answer","Answer Category","Inquiry"]].values.tolist()
         if combined_response == None:
-            return final_return
+            return self.clean_response(final_return)
         else:
             return self.clean_response([[combined_response,combined_category,combined_inquiry]] + final_return)
 
@@ -66,8 +66,9 @@ class responseGenerator():
             possible_text = self.regex_cleaner(text_answer)
             if possible_text:
                 text_answer = possible_text
-            
+            print("Before links: ", text_answer)
             text_answer = self.append_links(text_answer, self.link_finder(text_answer))
+            print("after: ", text_answer)
             responses_list[i][0] = text_answer
         return responses_list
 
@@ -136,3 +137,4 @@ class responseGenerator():
         i1 = self.vectorizer.transform([inquiry1])
         i2 = self.vectorizer.transform([inquiry2])
         return cosine_distances(i1,i2)
+
